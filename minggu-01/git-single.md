@@ -84,23 +84,23 @@ Setelah itu, Confirm Merge, branch yang kita kirimkan tadi sudah dimasukkan ke b
 
 ### Undo Commit Terakhir
 
-![01](gambar/git-revert.png)
+![01](gambar/git-revert.jpeg)
 
 Contoh di atas adalah contoh untuk mengubah README.md dengan beberapa commit. Setelh itu, kita akan mengembalikan ke posisi terakhir sebelum commit terakhir.
 
-![03](gambar/git-revert2.png)
+![03](gambar/git-revert2.jpeg)
 
 Jika commit sudah dilakukan, tetapi belum di-push ke repo GitHub (masih berada di lokal), cara membatalkannya:
-![04](gambar/git-revert3.png)
-![05](gambar/git-revert4.png)
+![04](gambar/git-revert3.jpeg)
+![05](gambar/git-revert4.jpeg)
 
 Untuk kembali ke perubahan pada saat yang sudah lama, yang perlu dilakukan adalah melakukan git revert <posisi> kemudian mengedit secara manual kemudian push ke repo.
 
-![06](gambar/git-revert5.png)
+![06](gambar/git-revert5.jpeg)
 
 Edit file tersebut, setelah itu simpan.
 
-![07]((gambar/git-revert6.png))
+![07]((gambar/git-revert6.jpeg))
 
 Setelah itu, lanjutkan proses revert. Saat git revert --continue isikan pesan revert.
-![08](gambar/git-revert7.png)
+![08](gambar/git-revert7.jpeg)
