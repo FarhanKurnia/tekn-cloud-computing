@@ -1,4 +1,4 @@
-<h1>Cloud Computing</h1>
+# Cloud Computing
 
 <h1>Definisi</h1>
 Cloud computing merupakan istilah dari Cloud diartikan sebagai internet dan Computing diartikan sebagai komputer. 
@@ -17,21 +17,30 @@ Cloud computing sendiri sebenarnya merupakan hasil dari evolusi yang berlangsung
 Pada saat itu, sistem seperti ini disebut dengan “Intergalactic Computer Network”. Sistem ini diciptakan oleh J.C.R. Licklider yang kemudian menjadi penanggung jawab atas pembangunan Advanced Research Projects Agency Network (ARPANET) tepatnya pada tahun 1969. Licklider memiliki sebuah cita-cita dimana ia ingin setiap orang di dunia ini mampu terhubung satu sama lain dan mampu mengakses data serta program dari berbagai sistus dan dari berbagai tempat.
 <br>
 <br>
-<b>Penambahan Konsep Oleh Para Pakar</b>
-<br>
 Berdasarkan dari dasar pendapat Liclider inilah kemudian perkembangan cloud computing mulai berlanjut. Beberapa ahli atau pakar kemudian memberikan tambahan mengenai konsep Licklider. Salah satunya adalah John McCarthy. John kemudian memberikan gagasan mengenai sebuah jaringan computing yang kemudian akan menjadi infrastuktur untuk public.
-<br>
 <br>
 Sejak saat itulah kemudian cloud computing atau sistem komputasi awan ini mulai berkembang dan berjalan secara seiringan dengan perkembangan web dan juga internet. Namun, pada tahun 1990an terjadi perubahan bandwidth yang bisa dikatakan cukup besar sehingga membuat internet menjadi lebih dahulu berkembang dibandingkan dengan perkembangan Cloud Computing. Seiring berjalannya waktu, kini mulai terlihat bahwa jaringan internet lah yang seakan menjadi pendorong utama sistem cloud computing.
 <br>
 <br>
-<b>Batu Loncatan pada Tahun 1999</b>
-<br>
-Pada tahun 1999, storage.salesforce.com seakan menjadi batu loncatan yang sangat berarti bagi sejarah perkembangan cloud computing. Mengapa? Karena situs tersebut merupakan pencetus yang pertama untuk aplikasi perusahaan yang dijalankan dengan Internet. Yang kemudian perkembangan cloud computing disusul dengan web Amazon pada tahun 2006 yang menggunakan teknologi Elastic Compute Cloud.
+Pada tahun 1999, storage.salesforce.com seakan menjadi batu loncatan yang sangat berarti bagi sejarah perkembangan cloud computing. Kemudian perkembangan cloud computing disusul dengan web Amazon pada tahun 2006 yang menggunakan teknologi Elastic Compute Cloud.
 <br>
 Teknologi ini memungkinkan terdapatnya situs layanan web yang bisa dikomersialkan dan juga memungkinkan beberapa perusahaan kecil atau besar dan juga individu untuk dapat menyewa computer atau juga server yang kemudian dapat difungsikan untuk memnjalankan setiap aplikasi yang mereka miliki. Batu loncatan besar lainnya datang pada tahun 2009. Pada saat itu, Google dan perusahaan besar lainnya mulai menawarkan aplikasi dengan browser sebagai dasarnya. Sebut saja seperti Google apps.
 <br>
-Pada dasarnya, cloud computing bisa sangat cepat menyebar dan menjadi sangat disukai karena adanya layanan yang mudah untuk dikonsumsi sehingga banyak orang yang menerimanya dan akan memberikan efek penerimaan yang luas. Selain itu, ada beberapa faktor lain pula yang mempengaruhi cepatnya sejarah perkembangan cloud computing seperti matangnya teknologi visual, perangkat lunak yang bersifat universal, serta perkembangan bandwidth dengan kecepatan tinggi.
+<br>
+
+<h1>Karakter Layanan</h1>
+<br>
+Menurut NIST, ada 5 Karakteristik Cloud Computing agar sebuah sistem dapat disebut sebagai Cloud Computing, yaitu:
+<br><b>a.	Broad Network Access:</b> Akses jaringan yang luas dan bisa diakses oleh berbagai jenis perangkat, seperti smartphone, tablet, laptop, dsb. Contohnya facebook mobile, memungkinkan kita untuk mengakses layanan facebook melalui  handphone, smartphone ataupun tablet dimanapun kita berada.
+<br>
+<br><b>b.	Resource Pooling:</b> sumber daya komputasi dari penyedia cloud harus memenuhi banyak pelanggan dan bersifat dinamis tergantung kebutuhan pelanggannya. Contohnya google, menyediakan ratusan ribu server yang tersebar di penjuru dunia sehingga dapat melayani jutaan penggunanya.
+<br>
+<br><b>c.	On-demand Self Service:</b> pengguna cloud dapat mengatur sendiri layanan yang dipakai  sesuai dengan kebutuhannya tanpa interaksi dari pihak penyedia layanan. Contohnya menggunakan gmail, kita bisa menyimpan, memindahkan, menghapus email, dsb tanpa campur tangan dari penyedia cloud.
+<br>
+<br><b>d.	Measured Service:</b> Sistem cloud menyediakan layanan yang dapat memonitor dan mengoptimalkan penggunaan sumber daya terhadap layanan yang dipakai (misalnya tempat penyimpanan, pemrosesan, bandwidth, dan akun pengguna yang aktif). Sehingga pelanggan dapat memonitor sumber daya komputasi yang dipakai secara transparan antara penyedia layanan dan pelanggan. Misalnya dropbox, kita bisa memantau space yang terpakai ataupun space yang masih kosong, mengetahui masa aktif akun, dan lain sebagainya.
+<br>
+<br><b>e.	Rapid Elasticity:</b> kapasitas layanan bersifat fleksibel tergantung kebutuhan pengguna. Sehingga pengguna cloud dapat dengan mudah meminta menaikkan atau menurunkan kapasitas layanan sesuai kebutuhannya. Jadi, kapasitas layanan ini seolah tak terbatas dan pengguna cloud dapat memilih sesuai dengan kebutuhannya setiap saat. Misalnya office 365, kita bisa dengan cepat mengubah layanan yang diinginkan dari small ke bussiness atau sebaliknya sesuai denngan kebutuhan.
+
 <br>
 <br>
 <h1>Model Layanan</h1> 
@@ -63,3 +72,4 @@ Jenis cloud ini biasanya dipakai buat interaksi tipe B2C (Business to Consumer).
 <br>
 <b>Hybrid Cloud</b>
 Jenis Cloud yang satu ini bisa digunakan untuk kedua jenis interaksi – B2B (Business to Business) atau B2C (Business to Consumer). Jadi, sumber daya komputasi terikat bersama tapi dengan cloud yang berbeda.
+
