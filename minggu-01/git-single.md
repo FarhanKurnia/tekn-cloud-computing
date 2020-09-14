@@ -100,7 +100,7 @@ Untuk kembali ke perubahan pada saat yang sudah lama, yang perlu dilakukan adala
 
 Edit file tersebut, setelah itu simpan.
 
-![07]((gambar/git-revert6.jpeg))
+![07](gambar/git-revert6.jpeg)
 
 Setelah itu, lanjutkan proses revert. Saat git revert --continue isikan pesan revert.
 ![08](gambar/git-revert7.jpeg)
