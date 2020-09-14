@@ -34,7 +34,7 @@ Repo `origin` sudah dituliskan konfigurasinya pada saat melakukan proses clone d
 
 Tambahkan remote upstream:
 
-![3](gambar/git-collab-remote-updtream.jpg)
+![3](gambar/git-collab-remote-upstream.jpg)
 
 
 ## Mengirimkan Pull Request 
@@ -78,6 +78,8 @@ Sebelum melakukan perubahan, pastikan:
 9. Sinkronkan semua repo (lokal maupun GitHub kontributor)
 
 ![3](gambar/git-collab-fetch-upstream4.jpg)
+
+![4](gambar/git-collab-delete-branch.jpg)
 
 ## Konflik
 
