@@ -59,4 +59,10 @@ Kekurangan:
 3. Sistem antrian (Sebuah protokon komunikasi asinkron yang memungkinkan pengirim dan penerima berinteraksi disaat yang sama atau dikenal dengan MSMQ seperti RabbitMq)
 
 Dengan Python, Mongo DB dan RabbitMQ sudah mencukupi dalam dasar pembangunan SaaS. Mungkin akan ada penambahan lain seperti kebutuhan software pemantauan dan analitik yang tepat.
+---
 
+### Referensi:
+1. [What is the difference between IaaS, SaaS, and PaaS?](https://www.quora.com/What-is-the-difference-between-IaaS-SaaS-and-Paas)
+2. [SaaS Platform Architecture.] (https://hackernoon.com/saas-software-as-a-service-platform-architecture-757a432270f5)
+3. [SaaS (Software as a Service) Platform itecture.] (https://www.devteam.space/blog/saas-software-as-a-service-platform-architecture/)
+4. [How to build a cloud-based SaaS Application] (https://usersnap.com/blog/cloud-based-saas-architecture-fundamentals/)
