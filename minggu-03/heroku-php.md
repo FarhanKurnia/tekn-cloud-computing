@@ -51,7 +51,7 @@
 
 1.	Install dependensi
 
-<div align="center"><img src="composer_update.png" width="800px"></div>
+<div align="center"><img src="gambar/php/composer_update.png" width="800px"></div>
 
 
 ## Melakukan perubahan
@@ -87,7 +87,7 @@
 ## Memulai dengan tampilan shell
 1.	Menjalankan di console, check environment
 
-<div align="center"><img src="gambar/php/consol.png" width="500px"></div>
+<div align="center"><img src="gambar/php/console.png" width="500px"></div>
 
 2.	Check file yang ada di dyno
 
