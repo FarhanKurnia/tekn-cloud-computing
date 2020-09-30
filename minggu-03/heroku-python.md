@@ -105,7 +105,7 @@
 
 2.	Melakukan perubahan di file views.py
 
-<div align="center"><img src="gambar/python/Heroku_define.png" width="500px"></div>
+<div align="center"><img src="gambar/python/Heroku_Views.png" width="500px"></div>
 
 3.	Buka Kembali [http://localhost:5000/] (http://localhost:5000/) setelah melakukan perubahan
 
@@ -113,14 +113,13 @@
 
 4.	Menyimpan perubahan ke repository di git
 
-<div align="center"><img src="img/py-18.png" width="500px"></div>
+<div align="center"><img src="gambar/python/Heroku_gitadd.png" width="500px"></div>
 
-<div align="center"><img src="img/py-19.png" width="500px"></div>
-<div align="center"><img src="img/py-20.png" width="500px"></div>
+<div align="center"><img src="gambar/python/Heroku_Deploy.png" width="500px"></div>
 
 5.	Cek di web aplikasi yang sudah dibuat
 
-<div align="center"><img src="img/py-17_db.png" width="200px"></div>
+<div align="center"><img src="gambar/python/Heroku_LocalWeb5.png" width="200px"></div>
 
 
 ### Penyediaan add-on
@@ -131,27 +130,29 @@
 ### Menjalankan di console
 1.	Menjalankan di console
 
-<div align="center"><img src="img/py-21.png" width="500px"></div>
+<div align="center"><img src="gambar/python/Heroku_Shield.png" width="500px"></div>
 
 2.	Check file yang ada di dyno
 
-<div align="center"><img src="img/py-22.png" width="500px"></div>
+<div align="center"><img src="gambar/python/Heroku_Bash.png" width="500px"></div>
 
 
 ### Define config vars
 1.	Edit views.py
 
-<div align="center"><img src="img/py-23.png" width="300px"></div>
+<div align="center"><img src="gambar/python/Heroku_Define0.png" width="300px"></div>
+
+<div align="center"><img src="gambar/python/Heroku_Define2.png" width="500px"></div>
  
 2.	Buka Kembali [http://localhost:5000/](http://localhost:5000/) setelah melakukan perubahan
 
-<div align="center"><img src="img/py-24.png" width="200px"></div>
+<div align="center"><img src="gambar/python/Heroku_Hello.png" width="200px"></div>
 
 3.	Setting config var di Heroku 
  
-<div align="center"><img src="img/py-25.png" width="500px"></div>
+<div align="center"><img src="gambar/python/Heroku_Define3.png" width="500px"></div>
 
 <br>
 <br>
 
-***Sumber : [Getting Started on Heroku with Python](https://devcenter.heroku.com/articles/getting-started-with-python?singlepage=true)***
+***Referensi : [Getting Started on Heroku with Python](https://devcenter.heroku.com/articles/getting-started-with-python?singlepage=true)***
