@@ -6,7 +6,7 @@
  
 <div align="center"><img src="gambar/php/version_php.png" width="500px"></div>
 
-<div align="center"><img src="gambar/php/version_compose.png" width="500px"></div>
+<div align="center"><img src="gambar/php/version_composer.png" width="500px"></div>
 
 <div align="center"><img src="gambar/php/version_git.png" width="300px"></div>
  
