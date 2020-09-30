@@ -84,32 +84,32 @@
 
 1.	Menjalankan collectstatic untuk menjalankan secara local
 
-<div align="center"><img src="img/py-12.png" width="500px"></div>
+<div align="center"><img src="gambar/python/Heroku_Manage.png" width="500px"></div>
 
 2.	Star APP secara local
 
-<div align="center"><img src="img/py-13.png" width="500px"></div>
+<div align="center"><img src="gambar/python/Heroku_Procfile2.png" width="500px"></div>
 
 3.	Buka dengan [http://localhost:5000/](http://localhost:5000/)
 
-<div align="center"><img src="img/py-06_db.png" width="500px"></div>
+<div align="center"><img src="gambar/python/Heroku_LocalWeb2.png" width="500px"></div>
 
 
 ### Melakukan perubahan
 
 1.	Melakukan perubahan dengan menambahkan dependencies
 
-<div align="center"><img src="img/py-14.png" width="500px"></div>
+<div align="center"><img src="gambar/python/Heroku_piprequest.png" width="500px"></div>
 
-<div align="center"><img src="img/py-15.png" width="300px"></div>
+<div align="center"><img src="gambar/python/Heroku_piprequest2.png" width="500px"></div>
 
 2.	Melakukan perubahan di file views.py
 
-<div align="center"><img src="img/py-16.png" width="300px"></div>
+<div align="center"><img src="gambar/python/Heroku_define.png" width="500px"></div>
 
 3.	Buka Kembali [http://localhost:5000/] (http://localhost:5000/) setelah melakukan perubahan
 
-<div align="center"><img src="img/py-17_db.png" width="200px"></div>
+<div align="center"><img src="gambar/python/Heroku_LocalWeb4.png" width="500px"></div>
 
 4.	Menyimpan perubahan ke repository di git
 
