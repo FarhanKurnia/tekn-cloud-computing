@@ -60,8 +60,9 @@ farhan@Arctic:~/apache-ofbiz-16.11.05$ sudo ./gradlew ofbiz
 ```
 
 Membuka OFBiz di Browser. Untuk user/password : admin/ofbiz
-(gambar/LoginOfbiz.png)
-(gambar/dashboard.png)
+<div align="center"><img src="gambar/LoginOfbiz.png" width="500px"></div>
+
+<div align="center"><img src="gambar/dashboard.png" width="500px"></div>
 
 Default dashboard: https://SERVER_IP:8443/ordermgr/control/main. 
 e-Commerce: https://SERVER_IP:8443/ecommerce
