@@ -65,8 +65,11 @@ Membuka OFBiz di Browser. Untuk user/password : admin/ofbiz
 <div align="center"><img src="gambar/dashboard.png" width="500px"></div>
 
 Default dashboard: https://SERVER_IP:8443/ordermgr/control/main. 
+<br>
 e-Commerce: https://SERVER_IP:8443/ecommerce
+<br>
 WebTools: https://SERVER_IP:8443/webtools
+<br>
 Catalog Manager: https://SERVER_IP:8443/catalog
 
 
