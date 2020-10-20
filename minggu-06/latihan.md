@@ -103,11 +103,11 @@ lalu klik finish.
 <div align="center"><img src="gambar/drivermysql.png" width="300px"></div>
 <div align="center"><img src="gambar/drivermongo.png" width="300px"></div>
 
-2. Program untuk mengambil data dengan MySQL sebagai (berikut)[code/mysql.go]
+2. Program untuk mengambil data dengan MySQL sebagai [berikut](code/mysql.go)
 
 3. Hasil membaca data dari MySQL menggunakan program
 
-4. Program untuk mengambil data dengan MongoDB sebagai (berikut)[code/mongo.go]
+4. Program untuk mengambil data dengan MongoDB sebagai [berikut](code/mongo.go)
 
 5. Hasil membaca data dari MySQL menggunakan program
 
