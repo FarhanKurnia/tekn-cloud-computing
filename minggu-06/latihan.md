@@ -95,3 +95,20 @@ lalu klik finish.
 
 3. Check versi MongoDB
 <div align="center"><img src="gambar/MongoDB/11.png" width="500px"></div>
+
+
+## Program untuk mambaca data pada database MySQL dan MongoDB
+1. Pastikan driver MySQL dan MongoDB connector sudah terinstall
+
+<div align="center"><img src="gambar/drivermysql.png" width="300px"></div>
+<div align="center"><img src="gambar/drivermongo.png" width="300px"></div>
+
+2. Program untuk mengambil data dengan MySQL sebagai (berikut)[code/mysql.go]
+
+3. Hasil membaca data dari MySQL menggunakan program
+
+4. Program untuk mengambil data dengan MongoDB sebagai (berikut)[code/mongo.go]
+
+5. Hasil membaca data dari MySQL menggunakan program
+
+
