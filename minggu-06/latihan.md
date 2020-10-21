@@ -1,7 +1,7 @@
 # Install Go, MySQL dan MongoDB
 
 ## Install Go 
-1. Download GO Installer melalui (Golang)[https://golang.org/doc/install]
+1. Download GO Installer melalui [Golang](https://golang.org/doc/install)
 
 2. Install GO sesuai gambar dibawah, klik next untuk setiap stepnya. Tunggu hingga proses installasi selesai lalau klik finish.
 
@@ -65,7 +65,7 @@
 <div align="center"><img src="gambar/MySQL/16.png" width="500px"></div>
 
 ## Install MongoDB
-1. Download MongoDB Installer melalui (MongogDB)[https://www.mongodb.com/try/download/community?tck=docs_server]
+1. Download MongoDB Installer melalui [MongogDB][(https://www.mongodb.com/try/download/community?tck=docs_server)
 
 2. Install MongoDB sesuai gambar dibawah, klik next untuk setiap stepnya. Tunggu hingga proses installasi selesai 
 lalu klik finish.
