@@ -107,8 +107,13 @@ lalu klik finish.
 
 3. Hasil membaca data dari MySQL menggunakan program
 
+<div align="center"><img src="gambar/Go/8.png" width="500px"></div>
+
 4. Program untuk mengambil data dengan MongoDB sebagai [berikut](code/mongo.go)
 
 5. Hasil membaca data dari MySQL menggunakan program
+
+<div align="center"><img src="gambar/Go/9.png" width="500px"></div>
+
 
 
