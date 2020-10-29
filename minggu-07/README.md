@@ -1,5 +1,6 @@
 # Minggu-07
 
-## Getting Started With Docker
-1. [Install Docker](latihan.md)
-2. [Image Docker](tugas.md) 
+## Teknologi Virtualisasi dan Container - Docker
+1. [Install Docker Windows (Gagal karena Virtualization firmware: disable)](latihan.md)
+2. [Install Docker Ubuntu](latihanDockerUbuntu.md)
+3. [Image Docker Ubuntu](tugas.md) 
