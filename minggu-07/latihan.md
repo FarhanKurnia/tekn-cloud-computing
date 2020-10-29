@@ -34,4 +34,4 @@
 
 <div align="center"><img src="gambar/10.png" width="500px"></div> 
 
-namun masih sama sehingga untuk praktikum saya ganti menggunakan [Ubuntu](latihanDockerUbuntu).
+namun masih sama sehingga untuk praktikum saya ganti menggunakan [Ubuntu](latihanDockerUbuntu.md).
