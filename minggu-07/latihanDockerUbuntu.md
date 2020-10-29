@@ -75,7 +75,14 @@ Okt 30 00:19:06 Arctic systemd[1]: Started Docker Application Container Engine.
 lines 1-21/21 (END)
 ```
 
- 7. untuk menjalankan docker bisa dicoba sebagai berikut.
+## Getting Started With Docker on Ubuntu
+ 1. Cek versi dari docker
+ ```bash
+ farhan@Arctic:~$ docker --version 
+Docker version 19.03.13, build 4484c46d9d
+```
+ 
+ 2. untuk menjalankan docker image hello world.
  ```bash
  farhan@Arctic:~$ docker run hello-world
 Unable to find image 'hello-world:latest' locally
@@ -105,3 +112,10 @@ Share images, automate workflows, and more with a free Docker ID:
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
  ```
+
+ 3. menampilkan seluruh struktur daftar image hello-world
+ ```bash
+ farhan@Arctic:~$ docker ps --all
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                     PORTS               NAMES
+7ef13f9584ce        hello-world         "/hello"            7 minutes ago       Exited (0) 7 minutes ago                       nostalgic_brahmagupta
+```
