@@ -194,7 +194,7 @@ Membuat depedensi aplikasi
 
 ## Step 8: Perintah lain
 - ```docker-compose up -d``` : untuk menjalankan docker compose di belakang layar (detached).
-- ```docker-compose ps`` : ntuk melihat service yang sedang berjalan.
+- ```docker-compose ps``` : ntuk melihat service yang sedang berjalan.
 - ```docker-compose stop``` : Untuk menghentikan service atau bisa dengan CTRL + C
 
 
