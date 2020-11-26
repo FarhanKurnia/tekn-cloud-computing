@@ -47,17 +47,19 @@ Membuat depedensi aplikasi
     ```bash
     farhan@Arctic:~/composetest$ nano requirements.txt
     ```
+
     Lalu masukan:
-    ```python
+    ```
     flask
     redis
     ```
 
 ## Step 2: Membuat Dockerfile
-    Buatlah file dengan nama Dockerfile
+1.  Buatlah file dengan nama Dockerfile
     ```bash
     farhan@Arctic:~/composetest$ nano Dockerfile
     ```
+
     Masukan:
     ```bash
     FROM python:3.7-alpine
@@ -73,7 +75,7 @@ Membuat depedensi aplikasi
     ```
 
 ## Step 3: Membuat layanan di dalam file compose
-    Buatlah file dengan nama docker-compose.yml
+2.  Buatlah file dengan nama docker-compose.yml
     ```bash
     farhan@Arctic:~/composetest$ nano docker-compose.yml
     ```
@@ -88,6 +90,7 @@ Membuat depedensi aplikasi
     redis:
         image: "redis:alpine"
     ```
+
     File Compose ini berisi layanan: Web dan Redis.
 
 
@@ -136,7 +139,7 @@ Membuat depedensi aplikasi
     ```
 
 ## Step 5: Edit file compose untuk menambah bind mount
-    Edit docker-compose.yml pada project dengan menambah bind mount untuk web service
+1.  Edit docker-compose.yml pada project dengan menambah bind mount untuk web service
     ```bash
     farhan@Arctic:~/composetest$ sudo nano docker-compose.yml 
     ```
@@ -157,7 +160,7 @@ Membuat depedensi aplikasi
     ```
 
 ## Step 6: Jalankan compose
-    Jalankan docker-compose up pada direktori project.
+1.  Jalankan docker-compose up pada direktori project.
     ```bash
     farhan@Arctic:~/composetest$ docker-compose up
     Starting composetest_redis_1 ... done
@@ -181,7 +184,7 @@ Membuat depedensi aplikasi
     ```
 
 ## Step 7: Update aplikasi
-    Hello world pada halaman dapat iubah melalui file app.py
+1.  Hello world pada halaman dapat iubah melalui file app.py
     ```python
     return 'Hello Farhan, this is from Docker! I have been seen {} times.\n'.format(count)
     ```
