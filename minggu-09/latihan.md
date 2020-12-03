@@ -439,4 +439,4 @@ f5600c6330da: Layer already exists
 2.0: digest: sha256:fbca2928e6831320b3072651d6afd0633fe56db5b48831cf9f0ba57142b349d3 size: 1777
 ```
 
-kita dapat mencari docker image di https://hub.docker.com/r/<your docker id>/
+kita dapat mencari docker image di https://hub.docker.com/r/`<your docker id>`/
