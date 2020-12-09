@@ -180,7 +180,6 @@ $ ip a
 ```
 
 ### Step 2: Connect a container
-The bridge network is the default network for new containers. This means that unless you specify a different network, all new containers will be connected to the bridge network.
 Network bridge adalah default network untuk containr baru. Kecuali dispesifikasikan network yang berbeda, semua container baru akan terhubung dengan network bridge.
 Buatlah container baru dengan perintah `run -dt ubuntu sleep infinity`.
 ```bash
