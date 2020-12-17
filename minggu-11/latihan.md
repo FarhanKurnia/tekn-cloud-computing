@@ -3,12 +3,21 @@
 ## Stage Setup
 Let’s get started by first cloning the demo code repository, changing the working directory, and checking the demo branch out.
 ```bash
-[node1] (local) root@192.168.0.23 
+[node1] (local) root@192.168.0.28 ~
 $ git clone https://github.com/ibnesayeed/linkextractor.git
-[node1] (local) root@192.168.0.23 
+Cloning into 'linkextractor'...
+remote: Enumerating objects: 4, done.
+remote: Counting objects: 100% (4/4), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 144 (delta 0), reused 0 (delta 0), pack-reused 140
+Receiving objects: 100% (144/144), 44.55 KiB | 7.42 MiB/s, done.
+Resolving deltas: 100% (43/43), done.
+[node1] (local) root@192.168.0.28 ~
 $ cd linkextractor
-[node1] (local) root@192.168.0.23 ~/linkextractor
+[node1] (local) root@192.168.0.28 ~/linkextractor
 $ git checkout demo
+Branch 'demo' set up to track remote branch 'demo' from 'origin'.
+Switched to a new branch 'demo'
 ```
 
 ## Step 0: Basic Link Extractor Script
@@ -883,6 +892,11 @@ Removing linkextractor_web_1 ... done
 Removing network linkextractor_default
 ```
 In the next step we will add one more service to our stack and will build a self-contained custom image for our web interface service
+
+## Step 5: Redis Service for Caching
+Checkout the step5 branch and list files in it.
+```bash
+
 
 
 
