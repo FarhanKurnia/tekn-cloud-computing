@@ -357,6 +357,9 @@ https://twitter.com/docker
 https://www.github.com/play-with-docker/play-with-docker.github.io
 ```
 
+<div align="center"><img src="gambar/1.png"></div>
+
+
 So far, we have learned how to containerize a script with its necessary dependencies to make it more portable. We have also learned how to make changes in the application and build different variants of Docker images that can co-exist. In the next step we will build a web service that will utilize this script and will make the service run inside a Docker container.
 
 ## Step 3: Link Extractor API Service
@@ -1427,7 +1430,7 @@ Since we have persisted logs, they should still be available after the services 
 [node1] (local) root@192.168.0.8 ~/linkextractor
 $ cat logs/extraction.log
 1608199240      MISS    http://example.com/
-```
+
 
 This illustrates that the caching is functional as the second attempt to the http://example.com/ resulted in a cache HIT.
 
@@ -1435,7 +1438,7 @@ In this step we explored the possibility of swapping components of an applicatio
 
 So far, we have used docker-compose utility to orchestrate the application stack, which is good for development environment, but for production environment we use docker stack deploy command to run the application in a Docker Swarm Cluster. It is left for you as an assignment to deploy this application in a Docker Swarm Cluster.
 
-Conclusions
+## Conclusions
 We started this tutorial with a simple Python script that scrapes links from a give web page URL. We demonstrated various difficulties in running the script. We then illustrated how easy to run and portable the script becomes onces it is containerized. In the later steps we gradually evolved the script into a multi-service application stack. In the process we explored various concepts of microservice architecture and how Docker tools can be helpful in orchestrating a multi-service stack. Finally, we demonstrated the ease of microservice component swapping and data persistence.
 
 The next step would be to learn how to deploy such service stacks in a Docker Swarm Cluster.
