@@ -71,12 +71,12 @@ $ ls -l linkextractor.py
 
 This current permission -rw-r--r-- indicates that the script is not set to be executable. We can either change it by running chmod a+x linkextractor.py or run it as a Python program instead of a self-executing script as illustrated below:
 ```bash
-[node1] (local) root@192.168.0.23 ~/linkextractor
-python linkextractor.py
+[node1] (local) root@192.168.0.28 ~/linkextractor
+$ python3 linkextractor.py
 Traceback (most recent call last):
   File "linkextractor.py", line 5, in <module>
     from bs4 import BeautifulSoup
-ImportError: No module named bs4
+ModuleNotFoundError: No module named 'bs4'
 ```
 Here we got the first ImportError message because we are missing the third-party package needed by the script. We can install that Python package (and potentially other missing packages) using one of the many techniques to make it work, but it is too much work for such a simple script, which might not be obvious for those who are not familiar with Python’s ecosystem.
 
@@ -896,6 +896,556 @@ In the next step we will add one more service to our stack and will build a self
 ## Step 5: Redis Service for Caching
 Checkout the step5 branch and list files in it.
 ```bash
+[node1] (local) root@192.168.0.28 ~/linkextractor
+$ git checkout step5
+Branch 'step5' set up to track remote branch 'step5' from 'origin'.
+Switched to a new branch 'step5'
+[node1] (local) root@192.168.0.28 ~/linkextractor
+$ tree
+.
+├── README.md
+├── api
+│   ├── Dockerfile
+│   ├── linkextractor.py
+│   ├── main.py
+│   └── requirements.txt
+├── docker-compose.yml
+└── www
+    ├── Dockerfile
+    └── index.php
+
+2 directories, 8 files
+```
+
+Some noticeable changes from the previous step are as following:
+
+Another Dockerfile is added in the ./www folder for the PHP web application to build a self-contained image and avoid live file mounting
+A Redis container is added for caching using the official Redis Docker image
+The API service talks to the Redis service to avoid downloading and parsing pages that were already scraped before
+A REDIS_URL environment variable is added to the API service to allow it to connect to the Redis cache
+Let’s first inspect the newly added Dockerfile under the ./www folder:
+```bash
+[node1] (local) root@192.168.0.28 ~/linkextractor
+$ cat www/Dockerfile
+FROM       php:7-apache
+LABEL      maintainer="Sawood Alam <@ibnesayeed>"
+
+ENV        API_ENDPOINT="http://localhost:5000/api/"
+
+COPY       . /var/www/html/
+```
+
+This is a rather simple Dockerfile that uses the official php:7-apache image as the base and copies all the files from the ./www folder into the /var/www/html/ folder of the image. This is exactly what was happening in the previous step, but that was bind mounted using a volume, while here we are making the code part of the self-contained image. We have also added the API_ENDPOINT environment variable here with a default value, which implicitly suggests that this is an important information that needs to be present in order for the service to function properly (and should be customized at run time with an appropriate value).
+
+Next, we will look at the API server’s api/main.py file where we are utilizing the Redis cache:
+```bash
+[node1] (local) root@192.168.0.28 ~/linkextractor
+$ cat api/main.py
+```
+```python
+#!/usr/bin/env python
+
+import os
+import json
+import redis
+from flask import Flask
+from flask import request
+from linkextractor import extract_links
+
+app = Flask(__name__)
+redis_conn = redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379"))
+
+@app.route("/")
+def index():
+    return "Usage: http://<hostname>[:<prt>]/api/<url>"
+
+@app.route("/api/<path:url>")
+def api(url):
+    qs = request.query_string.decode("utf-8")
+    if qs != "":
+        url += "?" + qs
+
+    jsonlinks = redis_conn.get(url)
+    if not jsonlinks:
+        links = extract_links(url)
+        jsonlinks = json.dumps(links, indent=2)
+        redis_conn.set(url, jsonlinks)
+
+    response = app.response_class(
+        status=200,
+        mimetype="application/json",
+        response=jsonlinks
+    )
+
+    return response
+
+app.run(host="0.0.0.0")
+```
+This time the API service needs to know how to connect to the Redis instance as it is going to use it for caching. This information can be made available at run time using the REDIS_URL environment variable. A corresponding ENV entry is also added in the Dockerfile of the API service with a default value.
+
+A redis client instance is created using the hostname redis (same as the name of the service as we will see later) and the default Redis port 6379. We are first trying to see if a cache is present in the Redis store for a given URL, if not then we use the extract_links function as before and populate the cache for future attempts.
+
+Now, let’s look into the updated docker-compose.yml file:
+```bash
+[node1] (local) root@192.168.0.28 ~/linkextractor
+$ cat docker-compose.yml
+version: '3'
+
+services:
+  api:
+    image: linkextractor-api:step5-python
+    build: ./api
+    ports:
+      - "5000:5000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+  web:
+    image: linkextractor-web:step5-php
+    build: ./www
+    ports:
+      - "80:80"
+    environment:
+      - API_ENDPOINT=http://api:5000/api/
+  redis:
+    image: redis
+```
+
+The api service configuration largely remains the same as before, except the updated image tag and added environment variable REDIS_URL that points to the Redis service. For the web service, we are using the custom linkextractor-web:step5-php image that will be built using the newly added Dockerfile in the ./www folder. We are no longer mounting the ./www folder using the volumes config. Finally, a new service named redis is added that will use the official image from DockerHub and needs no specific configurations for now. This service is accessible to the Python API using its service name, the same way the API service is accessible to the PHP front-end service.
+
+Let’s boot these services up:
+```bash
+[node1] (local) root@192.168.0.28 ~/linkextractor
+$ docker-compose up -d --build
+Creating network "linkextractor_default" with thedefault driver
+Building api
+Step 1/9 : FROM       python:3
+ ---> 2770b69c10e1
+Step 2/9 : LABEL      maintainer="Sawood Alam <@ibnesayeed>"
+ ---> Using cache
+ ---> 500aee4007f2
+Step 3/9 : ENV        REDIS_URL="redis://localhost:6379"
+ ---> Running in 1b977431d880
+Removing intermediate container 1b977431d880
+ ---> 3e99599ecb9d
+Step 4/9 : WORKDIR    /app
+ ---> Running in a44b2d51abb5
+Removing intermediate container a44b2d51abb5
+ ---> a0881a4f9855
+Step 5/9 : COPY       requirements.txt /app/
+ ---> 23ab5bac74b9
+Step 6/9 : RUN        pip install -r requirements.txt
+ ---> Running in 69da6b71ff98
+Collecting beautifulsoup4
+  Downloading beautifulsoup4-4.9.3-py3-none-any.whl (115 kB)
+Collecting soupsieve>1.2
+  Downloading soupsieve-2.1-py3-none-any.whl (32 kB)
+Collecting flask
+  Downloading Flask-1.1.2-py2.py3-none-any.whl (94 kB)
+Collecting click>=5.1
+  Downloading click-7.1.2-py2.py3-none-any.whl (82 kB)
+Collecting itsdangerous>=0.24
+  Downloading itsdangerous-1.1.0-py2.py3-none-any.whl (16 kB)
+Collecting Jinja2>=2.10.1
+  Downloading Jinja2-2.11.2-py2.py3-none-any.whl (125 kB)
+Collecting MarkupSafe>=0.23
+  Downloading MarkupSafe-1.1.1.tar.gz (19 kB)
+Collecting Werkzeug>=0.15
+  Downloading Werkzeug-1.0.1-py2.py3-none-any.whl(298 kB)
+Collecting redis
+  Downloading redis-3.5.3-py2.py3-none-any.whl (72 kB)
+Collecting requests
+  Downloading requests-2.25.1-py2.py3-none-any.whl (61 kB)
+Collecting certifi>=2017.4.17
+  Downloading certifi-2020.12.5-py2.py3-none-any.whl (147 kB)
+Collecting chardet<5,>=3.0.2
+  Downloading chardet-4.0.0-py2.py3-none-any.whl (178 kB)
+Collecting idna<3,>=2.5
+  Downloading idna-2.10-py2.py3-none-any.whl (58 kB)
+Collecting urllib3<1.27,>=1.21.1
+  Downloading urllib3-1.26.2-py2.py3-none-any.whl(136 kB)
+Building wheels for collected packages: MarkupSafe
+  Building wheel for MarkupSafe (setup.py): started
+  Building wheel for MarkupSafe (setup.py): finished with status 'done'
+  Created wheel for MarkupSafe: filename=MarkupSafe-1.1.1-cp39-cp39-linux_x86_64.whl size=32226 sha256=5abf93b76b3334ca61259b9348ff9ec35f5d70ff706b5ea0dd7103768d41b58c
+  Stored in directory: /root/.cache/pip/wheels/e0/19/6f/6ba857621f50dc08e084312746ed3ebc14211ba30037d5e44e
+Successfully built MarkupSafe
+Installing collected packages: MarkupSafe, Werkzeug, urllib3, soupsieve, Jinja2, itsdangerous, idna, click, chardet, certifi, requests, redis, flask,beautifulsoup4
+Successfully installed Jinja2-2.11.2 MarkupSafe-1.1.1 Werkzeug-1.0.1 beautifulsoup4-4.9.3 certifi-2020.12.5 chardet-4.0.0 click-7.1.2 flask-1.1.2 idna-2.10 itsdangerous-1.1.0 redis-3.5.3 requests-2.25.1 soupsieve-2.1 urllib3-1.26.2
+Removing intermediate container 69da6b71ff98
+ ---> eeba7ab4e6dc
+Step 7/9 : COPY       *.py /app/
+ ---> 61b1be12577b
+Step 8/9 : RUN        chmod a+x *.py
+ ---> Running in 726d7acdfd07
+Removing intermediate container 726d7acdfd07
+ ---> ed5211d2f703
+Step 9/9 : CMD        ["./main.py"]
+ ---> Running in 72a09a70d7bf
+Removing intermediate container 72a09a70d7bf
+ ---> efea996a84f9
+Successfully built efea996a84f9
+Successfully tagged linkextractor-api:step5-python
+Building web
+Step 1/4 : FROM       php:7-apache
+ ---> fd505f1f4cd8
+Step 2/4 : LABEL      maintainer="Sawood Alam <@ibnesayeed>"
+ ---> Running in f29fcb1d9f8b
+Removing intermediate container f29fcb1d9f8b
+ ---> a1149947d7dd
+Step 3/4 : ENV        API_ENDPOINT="http://localhost:5000/api/"
+ ---> Running in 4bbe8cfc53fa
+Removing intermediate container 4bbe8cfc53fa
+ ---> efb835cfc593
+Step 4/4 : COPY       . /var/www/html/
+ ---> fc5a5c5926d1
+Successfully built fc5a5c5926d1
+Successfully tagged linkextractor-web:step5-php
+Pulling redis (redis:)...
+latest: Pulling from library/redis
+6ec7b7d162b2: Already exists
+1f81a70aa4c8: Pull complete
+968aa38ff012: Pull complete
+884c313d5b0b: Pull complete
+6e858785fea5: Pull complete
+78bcc34f027b: Pull complete
+Digest: sha256:0f724af268d0d3f5fb1d6b33fc22127ba5cbca2d58523b286ed3122db0dc5381
+Status: Downloaded newer image for redis:latest
+Creating linkextractor_redis_1 ... done
+Creating linkextractor_web_1   ... done
+Creating linkextractor_api_1   ... done
+```
+
+Now, that all three services are up, access the web interface by clicking the Link Extractor. There should be no visual difference from the previous step. However, if you extract links from a page with a lot of links, the first time it should take longer, but the successive attempts to the same page should return the response fairly quickly. To check whether or not the Redis service is being utilized, we can use docker-compose exec followed by the redis service name and the Redis CLI’s monitor command:
+```bash
+[node1] (local) root@192.168.0.28 ~/linkextractor
+$ docker-compose exec redis redis-cli monitor
+OK
+```
+
+Now, try to extract links from some web pages using the web interface and see the difference in Redis log entries for pages that are scraped the first time and those that are repeated. Before continuing further with the tutorial, stop the interactive monitor stream as a result of the above redis-cli command by pressing Ctrl + C keys while the interactive terminal is in focus.
+
+Now that we are not mounting the /www folder inside the container, local changes should not reflect in the running service:
+```bash
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ sed -i 's/Link Extractor/Super Link Extractor/g' www/index.php
+```
+
+Verify that the changes made locally do not reflect in the running service by reloading the web interface and then revert changes:
+```bash
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ git reset --hard
+HEAD is now at 3dbb7eb Synchronize branch step5
+```
+
+
+Now, shut these services down and get ready for the next step:
+```bash
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ docker-compose down
+Stopping linkextractor_api_1   ... done
+Stopping linkextractor_web_1   ... done
+Stopping linkextractor_redis_1 ... done
+Removing linkextractor_api_1   ... done
+Removing linkextractor_web_1   ... done
+Removing linkextractor_redis_1 ... done
+Removing network linkextractor_default
+```
+
+We have successfully orchestrated three microservices to compose our Link Extractor application. We now have an application stack that represents the architecture illustrated in the figure shown in the introduction of this tutorial. In the next step we will explore how easy it is to swap components from an application with the microservice architecture.
+
+## Step 6: Swap Python API Service with Ruby
+Checkout the step6 branch and list files in it.
+```bash
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ git checkout step6
+Branch 'step6' set up to track remote branch 'step6' from 'origin'.
+Switched to a new branch 'step6'
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ tree
+.
+├── README.md
+├── api
+│   ├── Dockerfile
+│   ├── Gemfile
+│   └── linkextractor.rb
+├── docker-compose.yml
+├── logs
+└── www
+    ├── Dockerfile
+    └── index.php
+
+3 directories, 7 files
+```
+
+Some significant changes from the previous step include:
+
+The API service written in Python is replaced with a similar Ruby implementation
+The API_ENDPOINT environment variable is updated to point to the new Ruby API service
+The link extraction cache event (HIT/MISS) is logged and is persisted using volumes
+Notice that the ./api folder does not contain any Python scripts, instead, it now has a Ruby file and a Gemfile to manage dependencies.
+
+Let’s have a quick walk through the changed files:
+```bash
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ cat api/linkextractor.rb
+```
+```python
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+require "sinatra"
+require "open-uri"
+require "uri"
+require "nokogiri"
+require "json"
+require "redis"
+
+set :protection, :except=>:path_traversal
+
+redis = Redis.new(url: ENV["REDIS_URL"] || "redis://localhost:6379")
+
+Dir.mkdir("logs") unless Dir.exist?("logs")
+cache_log = File.new("logs/extraction.log", "a")
+
+get "/" do
+  "Usage: http://<hostname>[:<prt>]/api/<url>"
+end
+
+get "/api/*" do
+  url = [params['splat'].first, request.query_string].reject(&:empty?).join("?")
+  cache_status = "HIT"
+  jsonlinks = redis.get(url)
+  if jsonlinks.nil?
+    cache_status = "MISS"
+    jsonlinks = JSON.pretty_generate(extract_links(url))
+    redis.set(url, jsonlinks)
+  end
+
+  cache_log.puts "#{Time.now.to_i}\t#{cache_status}\t#{url}"
+
+  status 200
+  headers "content-type" => "application/json"
+  body jsonlinks
+end
+
+def extract_links(url)
+  links = []
+  doc = Nokogiri::HTML(open(url))
+  doc.css("a").each do |link|
+    text = link.text.strip.split.join(" ")
+    begin
+      links.push({
+        text: text.empty? ? "[IMG]" : text,
+        href: URI.join(url, link["href"])
+      })
+    rescue
+    end
+  end
+  links
+end
+```
+
+This Ruby file is almost equivalent to what we had in Python before, except, in addition to that it also logs the link extraction requests and corresponding cache events. In a microservice architecture application swapping components with an equivalent one is easy as long as the expectations of consumers of the component are maintained.
+```bash
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ cat api/Dockerfile
+FROM       ruby:2.6
+LABEL      maintainer="Sawood Alam <@ibnesayeed>"
+
+ENV        LANG C.UTF-8
+ENV        REDIS_URL="redis://localhost:6379"
+
+WORKDIR    /app
+COPY       Gemfile /app/
+RUN        bundle install
+
+COPY       linkextractor.rb /app/
+RUN        chmod a+x linkextractor.rb
+
+CMD        ["./linkextractor.rb", "-o", "0.0.0.0"]
+```
+
+Above Dockerfile is written for the Ruby script and it is pretty much self-explanatory.
+```bash
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ cat docker-compose.yml
+version: '3'
+
+services:
+  api:
+    image: linkextractor-api:step6-ruby
+    build: ./api
+    ports:
+      - "4567:4567"
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./logs:/app/logs
+  web:
+    image: linkextractor-web:step6-php
+    build: ./www
+    ports:
+      - "80:80"
+    environment:
+      - API_ENDPOINT=http://api:4567/api/
+  redis:
+    image: redis
+```
+
+The docker-compose.yml file has a few minor changes in it. The api service image is now named linkextractor-api:step6-ruby, the port mapping is changed from 5000 to 4567 (which is the default port for Sinatra server), and the API_ENDPOINT environment variable in the web service is updated accordingly so that the PHP code can talk to it.
+
+With these in place, let’s boot our service stack:
+```bash
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ docker-compose up -d --build
+Creating network "linkextractor_default" with thedefault driver
+Building api
+Step 1/10 : FROM       ruby:2.6
+2.6: Pulling from library/ruby
+6c33745f49b4: Already exists
+c87cd3c61e27: Already exists
+05a3c799ec37: Already exists
+a61c38f966ac: Already exists
+c2dd6d195b68: Already exists
+5265e56e04c1: Pull complete
+e4cba52ee328: Pull complete
+52c657f93bbe: Pull complete
+Digest: sha256:8fc798b044e47328c280a7c2b40156a02ccff82bda927234c1278bd7f2ff5148
+Status: Downloaded newer image for ruby:2.6
+ ---> 6ae7b3b686a8
+Step 2/10 : LABEL      maintainer="Sawood Alam <@ibnesayeed>"
+ ---> Running in abcb4b2e9334
+Removing intermediate container abcb4b2e9334
+ ---> e6525c47137b
+Step 3/10 : ENV        LANG C.UTF-8
+ ---> Running in d1a136724864
+Removing intermediate container d1a136724864
+ ---> 24b162643032
+Step 4/10 : ENV        REDIS_URL="redis://localhost:6379"
+ ---> Running in f702bc5c062c
+Removing intermediate container f702bc5c062c
+ ---> 604205c593fd
+Step 5/10 : WORKDIR    /app
+ ---> Running in 98d7bd273b06
+Removing intermediate container 98d7bd273b06
+ ---> 2e15508c7a1c
+Step 6/10 : COPY       Gemfile /app/
+ ---> ba2ea4e478d2
+Step 7/10 : RUN        bundle install
+ ---> Running in a25d05fac25a
+Fetching gem metadata from https://rubygems.org/.......
+Resolving dependencies...
+Using bundler 1.17.2
+Fetching mini_portile2 2.4.0
+Installing mini_portile2 2.4.0
+Fetching ruby2_keywords 0.0.2
+Installing ruby2_keywords 0.0.2
+Fetching mustermann 1.1.1
+Installing mustermann 1.1.1
+Fetching nokogiri 1.10.10
+Installing nokogiri 1.10.10 with native extensions
+Fetching rack-protection 2.1.0
+Installing rack-protection 2.1.0
+Fetching redis 4.2.5
+Installing redis 4.2.5
+Fetching tilt 2.0.10
+Installing tilt 2.0.10
+Fetching sinatra 2.1.0
+Installing sinatra 2.1.0
+Bundle complete! 3 Gemfile dependencies, 10 gems now installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.
+Removing intermediate container a25d05fac25a
+ ---> 9accf7b5de58
+Step 8/10 : COPY       linkextractor.rb /app/
+ ---> ee4848892547
+Step 9/10 : RUN        chmod a+x linkextractor.rb
+ ---> Running in be3e44304940
+Removing intermediate container be3e44304940
+ ---> 32be2c4c2b33
+Step 10/10 : CMD        ["./linkextractor.rb", "-o", "0.0.0.0"]
+ ---> Running in 188154796c27
+Removing intermediate container 188154796c27
+ ---> 9426e2210b4e
+Successfully built 9426e2210b4e
+Successfully tagged linkextractor-api:step6-ruby
+Building web
+Step 1/3 : FROM       php:7-apache
+ ---> fd505f1f4cd8
+Step 2/3 : LABEL      maintainer="Sawood Alam <@ibnesayeed>"
+ ---> Using cache
+ ---> 9ace41e16c0d
+Step 3/3 : COPY       . /var/www/html/
+ ---> a3d1a946c865
+Successfully built a3d1a946c865
+Successfully tagged linkextractor-web:step6-php
+Creating linkextractor_web_1   ... done
+Creating linkextractor_redis_1 ... done
+Creating linkextractor_api_1   ... done
+
+/ops-stage3
+```
+
+
+We should now be able to access the API (using the updated port number)
+```bash
+Creating linkextractor_api_1   ... done
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ curl -i http://localhost:4567/api/http://example.com/
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 97
+X-Content-Type-Options: nosniff
+Server: WEBrick/1.4.2 (Ruby/2.6.6/2020-03-31)
+Date: Thu, 17 Dec 2020 10:00:40 GMT
+Connection: Keep-Alive
+
+[
+  {
+    "text": "More information...",
+    "href": "https://www.iana.org/domains/example"
+  }
+]
+```
+
+Now, open the web interface by clicking the Link Extractor and extract links of a few URLs. Also, try to repeat these attempts for some URLs. If everything is alright, the web application should behave as before without noticing any changes in the API service (which is completely replaced).
+
+We can shut the stack down now:
+```bash
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ docker-compose down
+Stopping linkextractor_api_1   ... done
+Stopping linkextractor_web_1   ... done
+Stopping linkextractor_redis_1 ... done
+Removing linkextractor_api_1   ... done
+Removing linkextractor_web_1   ... done
+Removing linkextractor_redis_1 ... done
+Removing network linkextractor_default
+```
+
+Since we have persisted logs, they should still be available after the services are gone:
+``bash
+[node1] (local) root@192.168.0.8 ~/linkextractor
+$ cat logs/extraction.log
+1608199240      MISS    http://example.com/
+```
+
+This illustrates that the caching is functional as the second attempt to the http://example.com/ resulted in a cache HIT.
+
+In this step we explored the possibility of swapping components of an application with microservice architecture with their equivalents without impacting rest of the parts of the stack. We have also explored data persistence using bind mount volumes that persists even after the containers writing to the volume are gone.
+
+So far, we have used docker-compose utility to orchestrate the application stack, which is good for development environment, but for production environment we use docker stack deploy command to run the application in a Docker Swarm Cluster. It is left for you as an assignment to deploy this application in a Docker Swarm Cluster.
+
+Conclusions
+We started this tutorial with a simple Python script that scrapes links from a give web page URL. We demonstrated various difficulties in running the script. We then illustrated how easy to run and portable the script becomes onces it is containerized. In the later steps we gradually evolved the script into a multi-service application stack. In the process we explored various concepts of microservice architecture and how Docker tools can be helpful in orchestrating a multi-service stack. Finally, we demonstrated the ease of microservice component swapping and data persistence.
+
+The next step would be to learn how to deploy such service stacks in a Docker Swarm Cluster.
+
+As an aside, here are some introductory Docker slides.
+
+
+
+
+
 
 
 
